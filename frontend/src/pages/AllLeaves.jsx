@@ -46,8 +46,8 @@ const AllLeaves = () => {
   };
 
   // Permanently delete leave record
-  const handleDeleteLeave = async (id) => {
-    if (!window.confirm('Are you sure you want to permanently delete this leave record from the database?')) {
+  /*const handleDeleteLeave = async (id) => {
+    if (!window.confirm(' Permanently delete this leave record from the database?')) {
       return;
     }
     try {
@@ -58,8 +58,26 @@ const AllLeaves = () => {
       toast.error(err.response?.data?.message || 'Failed to delete leave record');
     }
   };
+*/
+const handleDeleteLeave = async (id) => {
+  const confirmation = window.prompt(
+    'Permanently delete this leave record?\nType "yes" to confirm:'
+  );
 
-  // Admin action for Manager leaves
+  if (confirmation?.trim().toLowerCase() !== 'yes') {
+    return;
+  }
+
+  try {
+    const res = await API.delete(`/leaves/${id}`);
+    toast.success(res.data.message || 'Leave record deleted permanently!');
+    fetchAllLeaves();
+  } catch (err) {
+    toast.error(err.response?.data?.message || 'Failed to delete leave record');
+  }
+};  
+
+// Admin action for Manager leaves
   const handleAction = async (id, action) => {
     const remarkText = window.prompt(`Enter remark for ${action} (optional):`, '');
     try {

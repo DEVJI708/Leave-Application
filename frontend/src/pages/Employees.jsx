@@ -129,16 +129,34 @@ const Employees = () => {
   };
 
   // Delete employee
+  // const handleDelete = async (id, name) => {
+  //   if (!window.confirm(`Delete Current user  "${name}"?`)) return;
+  //   try {
+  //     await API.delete(`/users/${id}`);
+  //     toast.success('User deleted successfully!');
+  //     fetchEmployees();
+  //   } catch (error) {
+  //     toast.error(error.response?.data?.message || 'Delete operation failed');
+  //   }
+  // };
+  //delete Employees
   const handleDelete = async (id, name) => {
-    if (!window.confirm(`Are you sure you want to delete user "${name}"?`)) return;
-    try {
-      await API.delete(`/users/${id}`);
-      toast.success('User deleted successfully!');
-      fetchEmployees();
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Delete operation failed');
-    }
-  };
+  const confirmation = window.prompt(
+    `Current  delete user "${name}"?\nType "yes" to confirm:`
+  );
+
+  if (confirmation?.trim().toLowerCase() !== 'yes') {
+    return;
+  }
+
+  try {
+    await API.delete(`/users/${id}`);
+    toast.success('User deleted successfully!');
+    fetchEmployees();
+  } catch (error) {
+    toast.error(error.response?.data?.message || 'Delete operation failed');
+  }
+};
 
   // Open Edit Modal
   const openEdit = (emp) => {
